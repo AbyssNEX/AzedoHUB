@@ -1691,9 +1691,9 @@ end)
 
 InfoSec:NewLabel("Right-click = Hold to aim (Aimbot)")
 InfoSec:NewLabel("Drag title bar to move")
-InfoSec:NewLabel("discord.gg/getsnowy")
+InfoSec:NewLabel("discord.gg/jX23ajWzxw")
 InfoSec:NewButton("Copy Discord", "Copy invite link", function()
-if setclipboard then setclipboard("https://discord.gg/getsnowy") end
+if setclipboard then setclipboard("https://discord.gg/jX23ajWzxw") end
 AzedoHubLib:Notify("Copied!", "Discord link copied.", 3, false)
 end)
 
@@ -1896,7 +1896,7 @@ TSBMain:NewPremiumSlider("Offset Z", "Forward/Backward position", 15, -15, funct
 TSBInfo:NewLabel("Integrated by Azedo HUB Hub")
 TSBInfo:NewLabel("Script made by nismovxa")
 TSBInfo:NewButton("Copy Official Discord", "Join our community", function()
-setclipboard("https://discord.gg/getsnowy")
+setclipboard("https://discord.gg/jX23ajWzxw")
 notify("Credits", "Link copied to clipboard!")
 end)
 end
