@@ -19,7 +19,7 @@ end
 
 do
     local environment = getgenv()
-    local runtime = environment.__Azedo HUBUIRuntime or {}
+    local runtime = environment.__AzedoHubUIRuntime or {}
 
     function runtime.corner(radius, parent)
         if typeof(parent) ~= "Instance" then return nil end
@@ -82,7 +82,7 @@ do
         return tween
     end
 
-    environment.__Azedo HUBUIRuntime = runtime
+    environment.__AzedoHubUIRuntime = runtime
     environment.corner = runtime.corner
     environment.stroke = runtime.stroke
     environment.gradient = runtime.gradient
@@ -144,8 +144,9 @@ pcall(function()
 if not setclipboard then
     if toclipboard then setclipboard = toclipboard
     elseif Clipboard and Clipboard.set then setclipboard = function(s) Clipboard:set(s) end
-else setclipboard = function() end end
+    end
 end
+end)
 
 if not mouse1press then
     local VIM = game:GetService("VirtualInputManager")
@@ -189,7 +190,6 @@ end
 if not identifyexecutor then
     getgenv().identifyexecutor = function() return "Unknown", "0.0.0" end
 end
-end)
 
 local Theme = {
 WindowWidth   = 720,
@@ -397,9 +397,11 @@ end
 end)
 end
 
-_detectedGame = { name = "Strongest Battlegrounds", features = 0 }
+if not _detectedGame then
+    _detectedGame = { name = "Strongest Battlegrounds", features = 0 }
+end
 
-local Azedo HUBLib = {}
+local AzedoHubLib = {}
 
 local _notifHolder = nil
 local function _pushNotif(title, text, dur, gold)
@@ -450,14 +452,14 @@ local function _pushNotif(title, text, dur, gold)
 end)
 end
 
-function Azedo HUBLib:Notify(title, text, dur, gold)
+function AzedoHubLib:Notify(title, text, dur, gold)
     task.spawn(_pushNotif, title, text, dur, gold)
 end
 
 local _lastPremNag      = 0
 local _activePremModal  = nil
-local PREM_SITE         = "getAzedo HUB.xyz/pricing"
-local PREM_SITE_URL     = "https://getAzedo HUB.xyz/pricing"
+local PREM_SITE         = "getsnowy.xyz/pricing"
+local PREM_SITE_URL     = "https://getsnowy.xyz/pricing"
 
 local function _nagPremium(featureName)
     local now = tick()
@@ -671,18 +673,18 @@ end)
 
 if not ok then
     local label = featureName and ("'" .. tostring(featureName) .. "'") or "That feature"
-    Azedo HUBLib:Notify("✦  PREMIUM LOCKED",
+    AzedoHubLib:Notify("✦  PREMIUM LOCKED",
     label .. " is locked to Azedo HUB Premium. Upgrade at " .. PREM_SITE, 5, true)
 end
 end
 
 local InternalLib
 do
-    local Azedo HUB_UI_URL = "https://raw.githubusercontent.com/0x1s2s/Azedo HUB-Ui-Library/5f1a093d63944fbeaf0801f6be09cef876b538ff/Azedo HUBUi"
+    local AzedoHub_UI_URL = "https://raw.githubusercontent.com/0x1s2s/Snowy-Ui-Library/5f1a093d63944fbeaf0801f6be09cef876b538ff/SnowyUi"
 
-    local function loadAzedo HUBUI()
+    local function loadAzedoHubUI()
         local ok, result = pcall(function()
-        return loadstring(game:HttpGet(Azedo HUB_UI_URL, true))()
+        return loadstring(game:HttpGet(AzedoHub_UI_URL, true))()
     end)
     if not ok or type(result) ~= "table" or type(result.Window) ~= "function" then
         error("[Azedo HUBHub] Azedo HUB UI v2 could not be loaded: " .. tostring(result), 0)
@@ -690,7 +692,7 @@ do
     return result
 end
 
-local Azedo HUBUIV2 = loadAzedo HUBUI()
+local AzedoHubUIV2 = loadAzedoHubUI()
 local activeNativeWindow
 local activeUsedIcons = {}
 
@@ -824,7 +826,7 @@ local function wrapSection(nativeSection)
 
         function InternalLib:CreateWindow(title)
             if not (activeNativeWindow and activeNativeWindow.gui and activeNativeWindow.gui.Parent) then
-                activeNativeWindow = Azedo HUBUIV2:Window({
+                activeNativeWindow = AzedoHubUIV2:Window({
                 Title = "Azedo HUB Studios",
                 Subtitle = tostring(title or (_detectedGame and _detectedGame.name) or "Azedo HUB Hub"),
                 IconPack = "phosphor",
@@ -1042,7 +1044,7 @@ local function nnChar() return nnLocalPlayer.Character end
     end
 
     local Config = { HubName = "Azedo HUB Studios", AccentColor = Color3.fromRGB(0, 162, 255) }
-    local function notify(title, text, dur) Azedo HUBLib:Notify(title, text, dur, false) end
+    local function notify(title, text, dur) AzedoHubLib:Notify(title, text, dur, false) end
 
         getgenv().Window = Kavo.CreateLib(Config.HubName, "Midnight")
         local Window = getgenv().Window
@@ -1050,8 +1052,8 @@ local function nnChar() return nnLocalPlayer.Character end
         do
             local environment = getgenv()
             local gameName = (_detectedGame and _detectedGame.name) or "Unknown"
-            environment.__Azedo HUBPayloadReady = {
-            nonce = environment.__Azedo HUBLaunchNonce,
+            environment.__AzedoHubPayloadReady = {
+            nonce = environment.__AzedoHubLaunchNonce,
             game = gameName,
             ui = true,
             at = os.clock(),
@@ -1059,15 +1061,15 @@ local function nnChar() return nnLocalPlayer.Character end
             print("[Azedo HUBHub] Payload UI ready: " .. tostring(gameName))
         end
 
-        getgenv().Azedo HUBLib = Azedo HUBLib; getgenv().Kavo = Kavo; getgenv().notify = notify
+        getgenv().AzedoHubLib = AzedoHubLib; getgenv().Kavo = Kavo; getgenv().notify = notify
 
         task.defer(function()
         pcall(function()
-        local overlay = getgenv().__Azedo HUBLoadingOverlay
+        local overlay = getgenv().__AzedoHubLoadingOverlay
         if overlay then
 
             overlay:Destroy()
-            getgenv().__Azedo HUBLoadingOverlay = nil
+            getgenv().__AzedoHubLoadingOverlay = nil
         end
     end)
 end)
@@ -1384,7 +1386,7 @@ function tabObj:AddLabel(txt) freeSec:NewLabel(txt) end
                 return win
             end
             function Bridge:Notify(opts)
-                pcall(function() Azedo HUBLib:Notify(opts.Title or "Notification", opts.Content or opts.Text or "", opts.Duration or 3) end)
+                pcall(function() AzedoHubLib:Notify(opts.Title or "Notification", opts.Content or opts.Text or "", opts.Duration or 3) end)
             end
             return Bridge
         end
@@ -1668,10 +1670,10 @@ AimbotParams.TeamCheck = state
 end)
 
 UISec:NewButton("Test Notification", "Test the notification system", function()
-Azedo HUBLib:Notify("Test", "Notifications are working!", 4, false)
+AzedoHubLib:Notify("Test", "Notifications are working!", 4, false)
 end)
 UISec:NewButton("Test Premium Alert", "Premium-style notification", function()
-Azedo HUBLib:Notify("Premium Alert", "This is how premium alerts look!", 4, true)
+AzedoHubLib:Notify("Premium Alert", "This is how premium alerts look!", 4, true)
 end)
 local uiTransparency = 0
 UISec:NewSlider("UI Opacity", "Adjust hub transparency", 8, 0, function(v)
@@ -1689,10 +1691,10 @@ end)
 
 InfoSec:NewLabel("Right-click = Hold to aim (Aimbot)")
 InfoSec:NewLabel("Drag title bar to move")
-InfoSec:NewLabel("discord.gg/getAzedo HUB")
+InfoSec:NewLabel("discord.gg/getsnowy")
 InfoSec:NewButton("Copy Discord", "Copy invite link", function()
-if setclipboard then setclipboard("https://discord.gg/getAzedo HUB") end
-Azedo HUBLib:Notify("Copied!", "Discord link copied.", 3, false)
+if setclipboard then setclipboard("https://discord.gg/getsnowy") end
+AzedoHubLib:Notify("Copied!", "Discord link copied.", 3, false)
 end)
 
 ScriptSec:NewButton("Reload Hub", "Destroys and reloads the UI", function()
@@ -1894,7 +1896,7 @@ TSBMain:NewPremiumSlider("Offset Z", "Forward/Backward position", 15, -15, funct
 TSBInfo:NewLabel("Integrated by Azedo HUB Hub")
 TSBInfo:NewLabel("Script made by nismovxa")
 TSBInfo:NewButton("Copy Official Discord", "Join our community", function()
-setclipboard("https://discord.gg/getAzedo HUB")
+setclipboard("https://discord.gg/getsnowy")
 notify("Credits", "Link copied to clipboard!")
 end)
 end
